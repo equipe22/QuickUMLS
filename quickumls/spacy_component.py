@@ -1,9 +1,49 @@
 import spacy
 from spacy.tokens import Span
 from spacy.strings import StringStore
+from spacy.language import Language
+from spacy.lang.fr import French
 
 from .core import QuickUMLS
 from . import constants
+
+
+@French.factory("quickumls", default_config={
+            'quickumls_fp' : 'umls_fr', 
+            'best_match': True, 
+            'ignore_syntax': False, 
+            'overlapping_criteria':'score',
+            'threshold':0.9, 
+            'similarity_name':'jaccard', 
+            'min_match_length':3,
+            'accepted_semtypes': constants.ACCEPTED_SEMTYPES,
+            'verbose':True, 
+            'keep_uppercase':False})
+def create_quickumls(nlp: Language, name: str, 
+                     quickumls_fp, 
+                     best_match, 
+                     ignore_syntax,
+                     overlapping_criteria,
+                     threshold,
+                     similarity_name, 
+                     min_match_length,
+                     accepted_semtypes,
+                     verbose, 
+                     keep_uppercase):
+
+    return SpacyQuickUMLS(nlp, 
+                          quickumls_fp, 
+                          best_match=best_match, 
+                          ignore_syntax = ignore_syntax,
+                         overlapping_criteria = overlapping_criteria,
+                         threshold = threshold,
+                        similarity_name = similarity_name, 
+                     min_match_length= min_match_length,
+                     accepted_semtypes= accepted_semtypes,
+                     verbose = verbose, 
+                     keep_uppercase = keep_uppercase)
+
+
 
 class SpacyQuickUMLS(object):
     name = 'QuickUMLS matcher'
