@@ -62,6 +62,11 @@ class SpacyQuickUMLS(object):
                 # add some custom metadata to the spans
                 span._.similarity = ngram_match_dict['similarity']
                 span._.semtypes = ngram_match_dict['semtypes']
-                doc.ents = list(doc.ents) + [span]
+                                
+                try:
+                    doc.ents = list(doc.ents) + [span]
+                except ValueError as e:
+                    print(e, span, span.start, span.end)
+                
                 
         return doc
